@@ -6,13 +6,25 @@
 
   </head>
   <body>
-    <button>Load</button>
-    <script type="module" src="/src/id.js"></script>
+    <div id="outer">
+      <!-- <button id="bootstrapSyntax">Boostrap syntax</button> -->
+      <button id="newProgram">New</button>
+      <button id="editSyntax">Edit Syntax</button>
+      <button id="editType">Edit Type</button>
+      <button id="editFormat">Edit Format</button>
+      <button id="editSemantics">Edit Semantics</button>
+      
+      <div id="contents">
+      </div>      
+    </div>
+    <script type="module" src="/src/renderer.js"></script>
+    <script type="module" src="/src/common.js"></script>
+    <script type="module" src="/src/value.js"></script>
+    <script type="module" src="/src/node.js"></script>
     <script type="module" src="/src/symbols.js"></script>
     <script type="module" src="/src/display.js"></script>
     <script type="module" src="/src/edit.js"></script>
     <script type="module" src="/src/compiled.js"></script>
     <script type="module" src="/src/bootstrap.js"></script>
-    <script type="module" src="/src/renderer.js"></script>
   </body>
 </html>

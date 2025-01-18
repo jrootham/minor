@@ -5,17 +5,17 @@
 // Shared across languages
 // Name is editable
 
-class Entry
+export class Entry
 {
 	constructor(name)
 	{
 		this.name = name;
 		this.id = Symbol();
-		this.scopeChain = null;m
+		this.scopeChain = null;
 	}
 }
 
-class Table
+export class Table
 {
 	constructor()
 	{
@@ -31,7 +31,7 @@ class Table
 		}
 		else
 		{
-			entry = new Entry(name);
+			const entry = new Entry(name);
 			this.nameTable.set(name, entry);
 			this.idTable.set(entry.id, entry);
 			return entry;

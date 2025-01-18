@@ -27,4 +27,41 @@
  */
 
 import './index.css';
+// import {displayBootstrap} from "./bootstrap.js";
+import {newProgram, editSyntax, editType, editFormat, editSemantics} from "./edit.js";
 
+export function getElement(id)
+{
+	return document.getElementById(id);
+}
+
+// getElement("bootstrapSyntax").addEventListener("click", displayBootstrap);
+getElement("newProgram").addEventListener("click", newProgram);
+getElement("editSyntax").addEventListener("click", editSyntax);
+getElement("editType").addEventListener("click", editType);
+getElement("editFormat").addEventListener("click", editFormat);
+getElement("editSemantics").addEventListener("click", editSemantics);
+
+export function getContents()
+{
+	return getElement("contents");
+}
+
+export function alert() 
+{
+	window.alert("Not implemented");
+}
+
+export function reset() 
+{
+	getContents.innerHTML = '<div id="tree"></div>';
+}
+
+export function button(label, action) 
+{
+	let button = document.createElement("button");
+	button.appendChild(label);
+	button.addEventListener("click", action);
+
+	return button;
+}
