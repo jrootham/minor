@@ -3,9 +3,7 @@
 // Syntax
 
 import {Table} from "./symbols.js";
-import {Type, Model} from "./node.js";
-import {display} from "./display.js";
-import {getContents} from "./renderer.js";
+import {Or, Literal, Text, Comment, Terminal, Identifier} from "./node.js";
 
 export const ROOTNAME = "root";
 
@@ -13,35 +11,39 @@ var bootstrapSymbols = new Table();
 
 function makeSyntax() 
 {
-	let terminal = new Model(bootstrapSymbols, "Terminal", Type.LIST);
-	let symbol = new Model(bootstrapSymbols, "Symbol", Type.SYMBOL);
-	let string = new Model(bootstrapSymbols, "String", Type.TEXT);
-	let literal = new Model(bootstrapSymbols, "Literal", Type.LITERAL);
-	let comment = new Model(bootstrapSymbols, "Comment", Type.COMMENT);
-	let or = new Model(bootstrapSymbols, "Or", Type.OR);
-	let list = new Model(bootstrapSymbols, "List", Type.LIST);
+	let terminal = new Terminal();
+	let identifier = new Identifier();
+	let text = new Text();
+	let literal = new Literal();
+	let comment = new Comment();
+	let or = new Or();
 
-	let choose = new Model(bootstrapSymbols, "Choose", Type.OR);
-	let syntax = new Model(bootstrapSymbols, "Elements", Type.LIST);
+	let choose = new Or();
 
-	syntax.adopt(choose);
-	choose.adopt(terminal);
+	terminal.setName(bootstrapSymbols, "Terminal");
+	identifier.setName(bootstrapSymbols, "Identifier");
+	text.setName(bootstrapSymbols, "Text");
+	literal.setName(bootstrapSymbols, "Literal");
+	comment.setName(bootstrapSymbols, "Comment");
+	or.setName(bootstrapSymbols, "Or");
 
-	terminal.append(choose);
-	symbol.append(choose);
-	string.append(literal);
-	literal.append(choose);
-	comment.append(choose);
-	or.append(choose);
+	choose.append(terminal);
+	choose.adopt(choose);
 
-	terminal.extend(symbol);
-	symbol.extend(string);
-	string.extend(literal);
-	literal.extend(comment);
-	comment.extend(or);
-	or.extend(list);
+	terminal.append(identifier);
+	identifier.append(text);
+	text.append(literal);
+	literal.append(comment);
+	comment.append(or);
 
-	return syntax;
+	terminal.extend(choose);
+	identifier.extend(choose);
+	text.extend(choose);
+	literal.extend(choose);
+	comment.extend(choose);
+	or.extend(choose);
+
+	return choose;
 }
 
 export var bootstrapSyntax = makeSyntax();

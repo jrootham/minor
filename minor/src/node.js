@@ -1,41 +1,49 @@
-import {enumValue} from "./common.js";
 
-// Fundamental data structures
-
-// Enum fakery
-
-// Types
-
-export const Type = Object.freeze(
-{
-      LIST: enumValue("Type.LIST")
-    , OR: enumValue("Type.OR")
-    , TERMINAL: enumValue("Type.TERMINAL")
-    , LITERAL: enumValue("Type.LITERAL")
-    , TEXT: enumValue("Type.TEXT")
-    , SYMBOL: enumValue("Type.SYMBOL")
-//    , REGEX: enumValue("Type.REGEX")
-    , COMMENT: enumValue("Type.COMMENT")
-});
-
-// Node definition 
 
 export class Node
 {
 	constructor()
 	{
-		this.hasName = false;
 		this.child = null;
 		this.right = null;
-		this.down = null;
+		this.nextChoice = null;
 	}
+
+	copyData(other)
+	{
+		other.child = this.child;
+		other.right = this.right;
+		other.nextChoice = this.nextChoice;
+	}
+}
+
+export class Model extends Node
+{
+	constructor()
+	{
+		super();
+		this.symbolTable = null;
+		this.id = null;
+	}
+
+	make(){}
 
 	setName(symbolTable, name)
 	{
 		this.symbolTable = symbolTable;
 		const entry = symbolTable.add(name);
 		this.id = entry.id;
-		this.hasName = true;
+	}
+
+	copyName(symbolTable, other)
+	{
+		if (this.id)
+		{
+			const entry = this.symbolTable.getById(this.id);
+			other.symbolTable = symbolTable;
+			const otherEntry = symbolTable.add(entry.name);
+			other.id = otherEntry.id;
+		}
 	}
 
 	extend(right)
@@ -43,9 +51,9 @@ export class Node
 		this.right = right;
 	}
 
-	append(down)
+	appendChoice(nextChoice)
 	{
-		this.down = down;
+		this.nextChoice = nextChoice;
 	}
 
 	adopt(child)
@@ -53,58 +61,141 @@ export class Node
 		this.child = child;
 	}
 
-	getName()
+	display(document, displayVisitor, actual, css){}
+}
+
+export class Or extends Model
+{
+	constructor()
 	{
-		let result = "";
+		super();
+	}
 
-		if (this.hasName)
-		{
-			result = this.symbolTable.getById(this.id).name;
-		}
+	make()
+	{
+		return new Or();
+	}
 
-		return result;
+	display(document, displayVisitor, actual, css)
+	{
+		return displayVisitor.displayOr(document, actual, css);
 	}
 }
 
-export class Model extends Node
+export class Literal extends Model
 {
-	constructor(type)
+	constructor()
 	{
 		super();
-		this.type = type;
+	}
+
+	make()
+	{
+		return new Literal();
+	}
+
+	display(document, displayVisitor, actual, css)
+	{
+		return displayVisitor.displayLiteral(document, actual, css);		
+	}
+}
+
+export class Text extends Model
+{
+	constructor()
+	{
+		super();
+	}
+
+	make()
+	{
+		return new Text();
+	}
+
+	display(document, displayVisitor, actual, css)
+	{
+		return displayVisitor.displayText(document, actual, css);
+	}
+}
+
+export class Comment extends Model
+{
+	constructor()
+	{
+		super();
+	}
+
+	make()
+	{
+		return new Comment();
+	}
+
+	display(document, displayVisitor, actual, css)
+	{
+		return displayVisitor.displayComment(document, actual, css);
 	}
 }
 
 export class Terminal extends Model
 {
-	constructor(value)
+	constructor()
 	{
-		super(Type.TERMINAL);
+		super();
+	}
+
+	setTerminal(value)
+	{
 		this.value = value;
+	}
+
+	make()
+	{
+		return new Terminal();
+	}
+
+	display(document, displayVisitor, actual, css)
+	{
+		return displayVisitor.displayTerminal(document, actual, css);
 	}
 }
 
-export class Symbol extends Model
+export class Identifier extends Model
 {
-	constructor(regex)
+	constructor()
 	{
-		super(Type.SYMBOL);
+		super();
+		this.regex = "*.";
+	}
+
+	setRegex(regex)
+	{
 		this.regex = regex;
+	}
+
+	make()
+	{
+		return new Identifier();
+	}
+
+	display(document, displayVisitor, actual, css)
+	{
+		return displayVisitor.displayIdentifier(document, actual, css);
 	}
 }
 
 export class Actual extends Node
 {
-	constructor(model, value)
+	constructor(model)
 	{
 		super();
 
 		this.parent = null;
 		this.left = null;
-		this.up = null;
+		this.previous = null;
 
 		this.model = model;
-		this.value = value;
+		this.current = model.make();
+		this.value = null;
 	}
 
 	extend(right)
@@ -113,16 +204,21 @@ export class Actual extends Node
 		right.left = this;
 	}
 
-	append(down)
+	appendChoice(nextChoice)
 	{
-		super.append(down)
-		down.up = this;
+		super.append(nextChoice)
+		nextChoice.previous = this;
 	}
 
 	adopt(child)
 	{
 		super.adopt(child)
 		child.parent = this;
+	}
+
+	display(document, displayVisitor, css)
+	{
+		return this.model.display(document, displayVisitor, this, css);
 	}
 
 	getName()

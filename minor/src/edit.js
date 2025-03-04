@@ -1,5 +1,5 @@
 import {getContents, alert} from "./renderer.js";
-import {bootstrapSyntax, bootstrapType, bootstrapFormat, ROOTNAME} from "./bootstrap.js";
+// import {bootstrapSyntax, bootstrapType, bootstrapFormat, ROOTNAME} from "./bootstrap.js";
 import {Actual} from "./node.js";
 import {Table} from "./symbols.js";
 import {Value} from "./value.js";
@@ -21,9 +21,9 @@ function symbolValue(actual)
 
 
 var divClass = new Value("inline");
-divClass.set(ROOTNAME, "block");
+// divClass.set(ROOTNAME, "block");
 
-displayValue = new Value(noValue);
+var displayValue = new Value(noValue);
 
 class Globals
 {
@@ -32,7 +32,7 @@ class Globals
 		this.symbols = null;
 		this.syntax = null;
 		this.type = null;
-		this.format = hack;
+		this.format = null;
 		this.semantics = null;
 		this.actual = null;
 	}
@@ -42,12 +42,14 @@ var globals = new Globals();
 
 export function newProgram(event) 
 {
-	globals.syntax = new Actual(bootstrapSyntax, null);
-	globals.symbols = new Table();
-	globals.syntax.setName(globals.symbols, ROOTNAME);
-	globals.type = new Actual(bootstrapType, null);
-	reset();
-	globals.actual = base(globals.syntax, getById("tree"));
+ 	globals.symbols = new Table();
+
+
+// 	globals.syntax = new Actual(bootstrapSyntax, null);
+// 	globals.syntax.setName(globals.symbols, ROOTNAME);
+// 	globals.type = new Actual(bootstrapType, null);
+// 	reset();
+// 	globals.actual = base(globals.syntax, getById("tree"));
 }
 
 export function editSyntax(event)
@@ -112,41 +114,3 @@ function makeInsertChild(actual, action)
 
 //	⨀⨁⨂ 
 
-function displayList(format, actual) 
-{
-	let className = format.get(actual.getName());
-	let result = '<div class=' + className + '>';
-
-	result += diplayEntry(className, actual.child);
-
-	result += button()
-	result += '</div>';
-
-	return result;
-}
-
-function displayOr(argument) 
-{
-}
-
-function displayActual(actual, before, after, actionString) 
-{
-	if (null === actual.value)
-	{
-		return button(actionString);
-	}
-	else
-	{
-		return before + actual.value + after;
-	}
-}
-
-var displayType = new Map();
-
-displayType.add(Type.LIST, (actual) => return ""):
-displayType.add(Type.OR, (actual) => return "");
-displayType.add(Type.TERMINAL, (actual) => return actual.value);
-displayType.add(Type.LITERAL, (actual) => return displayActual(actual, "", "")
-displayType.add(Type.TEXT, (actual) =>
-displayType.add(Type.SYMBOL, (actual) =>
-displayType.add(Type.COMMENT, (actual) =>

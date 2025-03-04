@@ -27,20 +27,24 @@
  */
 
 import './index.css';
-// import {displayBootstrap} from "./bootstrap.js";
-import {newProgram, editSyntax, editType, editFormat, editSemantics} from "./edit.js";
+import {setup} from "./topLevel"
+
+setup();
 
 export function getElement(id)
 {
 	return document.getElementById(id);
 }
 
-// getElement("bootstrapSyntax").addEventListener("click", displayBootstrap);
-getElement("newProgram").addEventListener("click", newProgram);
-getElement("editSyntax").addEventListener("click", editSyntax);
-getElement("editType").addEventListener("click", editType);
-getElement("editFormat").addEventListener("click", editFormat);
-getElement("editSemantics").addEventListener("click", editSemantics);
+export function setClick(element, action) 
+{
+	getElement(element).addEventListener("click", action);
+}
+
+export function setClickOnElement(element, action) 
+{
+	element.addEventListener("click", action);
+}
 
 export function getContents()
 {
@@ -54,14 +58,6 @@ export function alert()
 
 export function reset() 
 {
-	getContents.innerHTML = '<div id="tree"></div>';
+	getContents().innerHTML = '<div id="tree"></div>';
 }
 
-export function button(label, action) 
-{
-	let button = document.createElement("button");
-	button.appendChild(label);
-	button.addEventListener("click", action);
-
-	return button;
-}
