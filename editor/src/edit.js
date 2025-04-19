@@ -1,6 +1,6 @@
 import {getContents, alert} from "./renderer.js";
 // import {bootstrapSyntax, bootstrapType, bootstrapFormat, ROOTNAME} from "./bootstrap.js";
-import {Actual} from "./node.js";
+import {EditNode} from "./node.js";
 import {Table} from "./symbols.js";
 import {Value} from "./value.js";
 

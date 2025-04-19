@@ -56,10 +56,10 @@ export var bootstrapFormat = null;
 
 // function makeRegex() 
 // {
-// 	let symbol = new Model(bootstrapSymbols, "Symbol", Type.SYMBOL);
-// 	let regex = new Model(bootstrapSymbols, "RegexValue", Type.REGEX);
-// 	let line = new Model(bootstrapSymbols, "RegexLine", Type.LIST);
-// 	let lineList = new Model(bootstrapSymbols, "RegexLineList", Type.LIST);
+// 	let symbol = new Type(bootstrapSymbols, "Symbol", Type.SYMBOL);
+// 	let regex = new Type(bootstrapSymbols, "RegexValue", Type.REGEX);
+// 	let line = new Type(bootstrapSymbols, "RegexLine", Type.LIST);
+// 	let lineList = new Type(bootstrapSymbols, "RegexLineList", Type.LIST);
 
 // 	symbol.extend(regex);
 // 	line.adopt(symbol);

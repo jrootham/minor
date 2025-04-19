@@ -27,7 +27,7 @@
  */
 
 import './index.css';
-import {setup} from "./topLevel"
+import {setup} from "./topLevel.js"
 
 setup();
 
@@ -36,9 +36,9 @@ export function getElement(id)
 	return document.getElementById(id);
 }
 
-export function setClick(element, action) 
+export function setClick(id, action) 
 {
-	getElement(element).addEventListener("click", action);
+	getElement(id).addEventListener("click", action);
 }
 
 export function setClickOnElement(element, action) 
@@ -56,8 +56,12 @@ export function alert()
 	window.alert("Not implemented");
 }
 
-export function reset() 
+export function empty(element)
 {
-	getContents().innerHTML = '<div id="tree"></div>';
+	element.replaceChildren();
 }
 
+export function reset() 
+{
+	empty(getContents());
+}

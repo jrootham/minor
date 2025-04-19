@@ -34,8 +34,6 @@ export function display(done, node)
 		else
 		{
 			done.add(node.id);
-			console.log(node.getName());
-			console.log(node.type.toString());
 			const lead = around.get(node.type).lead;
 			const trail = around.get(node.type).trail;
 			value =  lead + node.getName() + trail;
